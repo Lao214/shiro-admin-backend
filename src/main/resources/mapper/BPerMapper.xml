@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shiro.dao.BPerMapper">
+
+    <resultMap id="sysPerMap" type="com.example.shiro.entity.BPer" autoMapping="true"></resultMap>
+
+
+    <!--//根据userid查找菜单权限数据-->
+    <select id="findPerListUserId" resultMap="sysPerMap">
+        SELECT DISTINCT
+            m.id,
+            m.parent_id,
+            m.per_name,
+            m.per_type,
+            m.per_path,
+            m.per_icon,
+            m.per_code
+        FROM b_per m
+        INNER JOIN
+            b_role_per rm ON m.id = rm.per_id
+        INNER JOIN
+            b_user_role ur ON rm.role_id = ur.role_id
+        <where>
+            ur.user_id = #{userId}
+            <if test="perType != null">
+                AND m.per_type = #{perType}
+            </if>
+        </where>
+    </select>
+
+    <!--//根据userid查找菜单权限数据-->
+    <select id="findMenuListUserId" resultMap="sysPerMap">
+        SELECT DISTINCT
+            m.id,
+            m.parent_id,
+            m.per_name,
+            m.per_type,
+            m.per_path,
+            m.per_icon,
+            m.per_code
+        FROM b_per m
+        INNER JOIN b_role_per rm ON m.id = rm.per_id
+        INNER JOIN b_user_role ur ON rm.role_id = ur.role_id
+        WHERE ur.user_id = #{userId}
+        AND m.per_type = 2
+    </select>
+
+
+</mapper>
