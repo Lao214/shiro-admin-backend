@@ -38,8 +38,6 @@ public class BUser implements Serializable {
     //(value = "密码盐")
     private String passwordSalt;
 
-    private Integer userType;
-
     private Integer isLocked;
 
 //    private String userRole;
@@ -60,5 +58,9 @@ public class BUser implements Serializable {
     private String nickname;
 
     private String avatar;
+
+    private String factory;
+
+    private String unit;
 
 }

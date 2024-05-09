@@ -37,6 +37,17 @@ public class  Result {
         return  result;
     }
 
+    /** 登录已过期 **/
+    public static Result loginExpired(){
+        Result result =new Result();
+        result.setSuccess(false);
+        result.setCode(ResultCode.LOGIN_EXPIRED);
+        result.setMsg("登录凭证已失效，请重新登录");
+        return  result;
+    }
+
+
+    // 无权限
     public static Result denyAccess(){
         Result result =new Result();
         result.setSuccess(false);

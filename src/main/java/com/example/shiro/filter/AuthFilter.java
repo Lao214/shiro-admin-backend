@@ -8,6 +8,7 @@ package com.example.shiro.filter;/*
 
 import com.example.shiro.utils.AuthToken;
 import com.example.shiro.utils.Result;
+import com.example.shiro.utils.ResultCode;
 import com.google.gson.Gson;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -85,7 +86,7 @@ public class AuthFilter extends AuthenticatingFilter {
         try {
             //处理登录失败的异常
             Throwable throwable = e.getCause() == null ? e : e.getCause();
-            Result msg= Result.error().msg("登录凭证已失效，请重新登录");
+            Result msg= Result.loginExpired();
 //            Msg msg=Msg.fail("登录凭证已失效，请重新登录");
             httpResponse.getWriter().write(gson.toJson(msg));
         } catch (IOException e1) {

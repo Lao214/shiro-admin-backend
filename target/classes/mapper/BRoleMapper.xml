@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.shiro.dao.BRoleMapper">
 
+
+    <resultMap id="RoleMap" type="com.example.shiro.entity.BRole" autoMapping="true"></resultMap>
+
 </mapper>

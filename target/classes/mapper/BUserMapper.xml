@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.shiro.dao.BUserMapper">
+    <resultMap id="bUserMap" type="com.example.shiro.entity.BUser" autoMapping="true"></resultMap>
 
+    <select id="selectPage" resultMap="bUserMap">
+        select  id,username,is_locked,nickname,avatar,create_time,update_time,factory,unit
+        from b_user
+        <where>
+            is_locked = 1
+            <if test="vo.username != null and vo.username != ''">
+                and (username like CONCAT('%',#{vo.username},'%'))
+            </if>
+            <if test="vo.nickname != null and vo.nickname != ''">
+                and (nickname like CONCAT('%',#{vo.nickname},'%'))
+            </if>
+            <if test="vo.factory != null and vo.factory != ''">
+                and (factory like CONCAT('%',#{vo.factory},'%'))
+            </if>
+            <if test="vo.unit != null and vo.unit != ''">
+                and (unit like CONCAT('%',#{vo.unit},'%'))
+            </if>
+        </where>
+        order by id desc
+    </select>
 </mapper>

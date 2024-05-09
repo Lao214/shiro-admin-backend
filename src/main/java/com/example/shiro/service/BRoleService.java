@@ -2,6 +2,9 @@ package com.example.shiro.service;
 
 import com.example.shiro.entity.BRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.shiro.entity.Vo.AssginRoleVo;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface BRoleService extends IService<BRole> {
 
+    Map<String, Object> getRolesByUserId(String userId);
+
+    void doAssign(AssginRoleVo assginRoleVo);
 }

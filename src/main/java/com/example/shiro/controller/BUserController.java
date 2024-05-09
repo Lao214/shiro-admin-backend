@@ -3,11 +3,15 @@ package com.example.shiro.controller;
 
 import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.shiro.entity.*;
+import com.example.shiro.entity.Vo.UserQueryVo;
 import com.example.shiro.entity.enumVo.RoleEnum;
 import com.example.shiro.service.BPerService;
 import com.example.shiro.service.BUserRoleService;
 import com.example.shiro.service.BUserService;
+import com.example.shiro.utils.PerHelper;
 import com.example.shiro.utils.Result;
 import com.example.shiro.utils.SHA256Utils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -61,24 +65,6 @@ public class BUserController {
         return Result.success().msg("hello");
     }
 
-    @RequiresPermissions("SUPER_ADMIN")
-    @PostMapping("/addUser")
-    @Transactional(rollbackFor = Exception.class)
-    public Result addUser(@RequestBody BUser user){
-        String salt = SHA256Utils.generateSalt();
-        user.setPasswordSalt(salt);
-        user.setPassword(SHA256Utils.hashPassword(user.getPassword(), salt));
-        boolean save = bUserService.save(user);
-        if(save) {
-            BUserRole bUserRole = new BUserRole();
-            bUserRole.setUserId(user.getId());
-            bUserRole.setRoleId(RoleEnum.GENERAL_USER.getRoleId());
-            bUserRoleService.save(bUserRole);
-            return Result.success().msg("添加成功");
-        } else  {
-            return Result.error().msg("添加成功");
-        }
-    }
 
     //登录接口
     @PostMapping("/login")
@@ -130,7 +116,6 @@ public class BUserController {
     @GetMapping("info")
     public Result info(HttpServletRequest request) {
         // 获取请求头token字符串
-//        String token = request.getHeader("ec-token");
         String token = request.getHeader("token");
         if (token == null) {
             return Result.error().code(201).msg("请重新登录");
@@ -139,7 +124,6 @@ public class BUserController {
 
         // 根据token获取ID
         try {
-
             QueryWrapper<BUser> saUserQueryWrapper =new QueryWrapper<>();
             saUserQueryWrapper.eq("username",username);
             BUser one = bUserService.getOne(saUserQueryWrapper);
@@ -152,13 +136,73 @@ public class BUserController {
 //            result.put("routers",routerVolist);
             //按钮权限数据
 //            result.put("buttons",permsList);
+            List<BPer> perListUserId = bPerService.findPerListUserId(one.getId(), 2);
+            List<BPer> bPerList = PerHelper.bulidTree(perListUserId);
+            one.setMenus(bPerList);
             return Result.success().data("one",one);
         }catch (Exception e) {
             return Result.error().code(201).msg("请重新登录");
         }
-
     }
 
+
+    @GetMapping("getPageList/{page}/{limit}")
+    public Result list(@PathVariable Long page, @PathVariable Long limit, UserQueryVo userQueryVo) {
+        //创建page对象
+        Page<BUser> pageParam = new Page<>(page,limit);
+        //调用service方法
+        IPage<BUser> pageModel = bUserService.selectPage(pageParam,userQueryVo);
+        return Result.success().data("data",pageModel);
+    }
+
+    @GetMapping("getUser/{id}")
+    public Result getUser(@PathVariable String id) {
+        BUser user = bUserService.getById(id);
+        return Result.success().data("data",user);
+    }
+
+    @PostMapping("update")
+    public Result update(@RequestBody BUser user) {
+        boolean is_Success = bUserService.updateById(user);
+        if(is_Success) {
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @PostMapping("/addUser")
+    @Transactional(rollbackFor = Exception.class)
+    public Result addUser(@RequestBody BUser user){
+        String salt = SHA256Utils.generateSalt();
+        user.setPasswordSalt(salt);
+        user.setPassword(SHA256Utils.hashPassword(user.getPassword(), salt));
+        boolean save = bUserService.save(user);
+        if(save) {
+            BUserRole bUserRole = new BUserRole();
+            bUserRole.setUserId(user.getId());
+            bUserRole.setRoleId(RoleEnum.GENERAL_USER.getRoleId());
+            bUserRoleService.save(bUserRole);
+            return Result.success().msg("添加成功");
+        } else  {
+            return Result.error().msg("添加成功");
+        }
+    }
+
+
+    @DeleteMapping("remove/{id}")
+    @Transactional
+    public Result remove(@PathVariable String id) {
+        boolean is_Success = bUserService.removeById(id);
+        if(is_Success) {
+            QueryWrapper<BUserRole> bUserRoleQueryWrapper = new QueryWrapper<>();
+            bUserRoleQueryWrapper.eq("user_id",id);
+            bUserRoleService.remove(bUserRoleQueryWrapper);
+            return Result.success();
+        } else {
+            return Result.error();
+        }
+    }
 
 }
 
