@@ -5,4 +5,15 @@
 
     <resultMap id="RoleMap" type="com.example.shiro.entity.BRole" autoMapping="true"></resultMap>
 
+    <!--条件分页查询-->
+    <select id="selectPage" resultMap="RoleMap">
+        SELECT id,role_name,create_time
+        FROM b_role
+        <where>
+            <if test="vo.roleName != null and vo.roleName != ''">
+                and role_name LIKE CONCAT('%',#{vo.roleName},'%')
+            </if>
+        </where>
+        order by id desc
+    </select>
 </mapper>

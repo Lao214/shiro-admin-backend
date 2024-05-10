@@ -1,8 +1,11 @@
 package com.example.shiro.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.shiro.entity.BRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.shiro.entity.Vo.AssginRoleVo;
+import com.example.shiro.entity.Vo.UserQueryVo;
 
 import java.util.Map;
 
@@ -19,4 +22,6 @@ public interface BRoleService extends IService<BRole> {
     Map<String, Object> getRolesByUserId(String userId);
 
     void doAssign(AssginRoleVo assginRoleVo);
+
+    IPage<BRole> selectPage(Page<BRole> pageParam, UserQueryVo userQueryVo);
 }

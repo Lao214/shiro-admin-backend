@@ -30,7 +30,7 @@ public class BRolePer implements Serializable {
     private Long roleId;
 
     //@ApiModelProperty(value = "权限ID")
-    private String perId;
+    private Long perId;
 
 
 }

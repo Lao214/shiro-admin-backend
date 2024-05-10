@@ -2,6 +2,7 @@ package com.example.shiro.service;
 
 import com.example.shiro.entity.BPer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.shiro.entity.Vo.AssginMenuVo;
 
 import java.util.List;
 
@@ -18,4 +19,11 @@ public interface BPerService extends IService<BPer> {
 
     List<BPer> findPerListUserId(Long userId, Integer perType);
 
+    List<BPer> findMenuByRoleId(Long roleId);
+
+    void doAssign(AssginMenuVo assginMenuVo);
+
+    List<BPer> findNodes();
+
+    void removePerById(String id);
 }

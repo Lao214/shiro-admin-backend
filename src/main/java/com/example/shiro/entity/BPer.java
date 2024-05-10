@@ -51,11 +51,17 @@ public class BPer implements Serializable {
     //@ApiModelProperty(value = "路径")
     private String perPath;
 
+    private String component;
+
     private Long parentId;
 
     private Integer perSort;
 
     @TableField(exist = false)
     private List<BPer> children;
+
+    //是否选中
+    @TableField(exist = false)
+    private boolean isSelect;
 
 }

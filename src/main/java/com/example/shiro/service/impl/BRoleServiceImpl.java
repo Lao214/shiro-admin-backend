@@ -1,11 +1,14 @@
 package com.example.shiro.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.shiro.dao.BUserRoleMapper;
 import com.example.shiro.entity.BRole;
 import com.example.shiro.dao.BRoleMapper;
 import com.example.shiro.entity.BUserRole;
 import com.example.shiro.entity.Vo.AssginRoleVo;
+import com.example.shiro.entity.Vo.UserQueryVo;
 import com.example.shiro.service.BRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +69,11 @@ public class BRoleServiceImpl extends ServiceImpl<BRoleMapper, BRole> implements
             userRole.setRoleId(Long.parseLong(roleId));
             bUserRoleMapper.insert(userRole);
         }
+    }
+
+    @Override
+    public IPage<BRole> selectPage(Page<BRole> pageParam, UserQueryVo userQueryVo) {
+        IPage<BRole> pageModel = baseMapper.selectPage(pageParam,userQueryVo);
+        return pageModel;
     }
 }

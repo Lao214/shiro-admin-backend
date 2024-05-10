@@ -18,4 +18,6 @@ public class UserQueryVo {
     private String unit;
 
     private String factory;
+
+    private String roleName;
 }
