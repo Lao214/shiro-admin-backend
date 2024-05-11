@@ -169,6 +169,7 @@ public class BUserController {
         String salt = SHA256Utils.generateSalt();
         user.setPasswordSalt(salt);
         user.setPassword(SHA256Utils.hashPassword(user.getPassword(), salt));
+        user.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         boolean save = bUserService.save(user);
         if(save) {
             BUserRole bUserRole = new BUserRole();
