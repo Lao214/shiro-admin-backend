@@ -14,7 +14,10 @@
             m.per_type,
             m.per_path,
             m.per_icon,
-            m.per_code
+            m.per_code,
+            m.component,
+            m.per_level,
+            m.per_sort
         FROM b_per m
         INNER JOIN
             b_role_per rm ON m.id = rm.per_id

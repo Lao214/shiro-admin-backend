@@ -128,14 +128,6 @@ public class BUserController {
             saUserQueryWrapper.eq("username",username);
             BUser one = bUserService.getOne(saUserQueryWrapper);
             //根据用户名称获取用户信息（基本信息 和 菜单权限 和 按钮权限数据）
-//            Map<String,Object> result = new HashMap<>();
-//            result.put("name",one.getUsername());
-//            result.put("avatar","https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-//            result.put("roles","[\"admin\"]");
-            //菜单权限数据
-//            result.put("routers",routerVolist);
-            //按钮权限数据
-//            result.put("buttons",permsList);
             List<BPer> perListUserId = bPerService.findPerListUserId(one.getId(), 2);
             List<BPer> bPerList = PerHelper.bulidTree(perListUserId);
             one.setMenus(bPerList);

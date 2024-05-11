@@ -57,6 +57,8 @@ public class BPer implements Serializable {
 
     private Integer perSort;
 
+    private Integer perLevel;
+
     @TableField(exist = false)
     private List<BPer> children;
 
